@@ -7,6 +7,7 @@ class IFont;
 class Engine
 {
 	int width, height, flags;
+	int clientW, clientH;
 	float xr,yr;
 	float x,y,z;
 	float elapsedtime;

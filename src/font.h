@@ -14,6 +14,8 @@ public:
 	virtual int Measure(const char *text) = 0;
 
 	/// Returns the number of pixels to move vertically for a new line of text.
+	/// TODO: CHANGE: don't imply this low level line spacing. Leave that up to the usage. This should measure
+	///       the height of the font in pixels, or handle multi-line string height?
 	virtual int LineHeight() = 0;
 
 	// TODO: Have a text layout class, with options for wrap n'stuff, and simplify what this does.
@@ -27,8 +29,12 @@ public:
 // now, that should be similar after this goes away.
 class FixedWidthBMPFont : public IFont
 {
-	static const float X_SPACE_SIZE = 0.6f;
-	static const float Y_SPACE_SIZE = 1.25f;
+	static const float GLYPH_PERCENT_OF_CELL_X;
+	static const float GLYPH_PERCENT_OF_CELL_Y;
+	static const float GLPYH_CELL_PADDING_X;
+	static const float GLPYH_CELL_PADDING_Y;
+	static const float GLPYH_CENTER_OFFSET_X;
+	static const float GLPYH_CENTER_OFFSET_Y;
 
 	unsigned int f_texture;
 	int size;
@@ -41,8 +47,10 @@ public:
 
 	virtual void print(int x, int y, const char *text);
 
-	int CharWidth() { return size * X_SPACE_SIZE; }
-	int CharHeight() { return size * Y_SPACE_SIZE; }
+	// These return floats because they otherwise imply too much rounding.
+	// Use round, ceil, or truncate as you see fit.
+	float CharWidth() { return size * GLYPH_PERCENT_OF_CELL_X; }
+	float CharHeight() { return size * GLYPH_PERCENT_OF_CELL_Y; }
 };
 
 

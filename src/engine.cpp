@@ -1,33 +1,16 @@
 #include "engine.h"
 #include "font.h"
 
-#include "SDL.h"
+#include "sdl_gl.h"
 
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
-#ifdef _WIN32
-#include <windows.h>
-#endif  // _WIN32
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif  // Anything other than __APPLE__
-
-
-// #include <adMatrix.h>
 // #define _USE_MATH_DEFINES 1
 #include <math.h>
 #include <iostream>
 
-//#include "test.h"
 
 using namespace std;
-//using ad::Vec4;
 
 static const char *APP_NAME = "SDLJumpStart";
-
-static const double PI_OVER_180 = 0.01745329;
 
 //static float l0_position[] = {-1.0f, -0.3f, 1.0f, 0.0f};
 static float l0_position[] = {0.0f, 0.0f, 1.0f, 0.0f};
@@ -60,10 +43,7 @@ Engine::Engine()
 
 	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
 
-	sdl_window = SDL_CreateWindow(APP_NAME,
-		SDL_WINDOWPOS_CENTERED,
-		SDL_WINDOWPOS_CENTERED,
-		width, height, flags);
+	sdl_window = SDL_CreateWindow(APP_NAME, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags);
 
 	if (sdl_window == NULL)
 	{
@@ -72,6 +52,7 @@ Engine::Engine()
 	}
 
 	sdl_gl_context = SDL_GL_CreateContext(sdl_window);
+	SDL_GL_GetDrawableSize(sdl_window, &clientW, &clientH);
     
 	glClearColor(0, 0, 0, 0);
 	glClearDepth(1.0f);
@@ -91,10 +72,10 @@ Engine::Engine()
 	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.01f);
 	glEnable(GL_LIGHT0);
 	
-	glViewport(0,0,width,height);
+	glViewport(0, 0, clientW, clientH);
 	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity( );
-	gluPerspective( 60.0, (float)width/(float)height, 0.00000000001, 1024.0 );
+	gluPerspective( 60.0, (float)clientW/(float)clientH, 0.00000000001, 1024.0 );
 	
 	font = new FixedWidthBMPFont("images/font.bmp", 16);
 
@@ -148,10 +129,10 @@ void Engine::Draw()
 // 		return;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glViewport(0, 0, width, height);
+	glViewport(0, 0, clientW, clientH);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0, (float)width/(float)height, 0.0001, 1024.0);
+	gluPerspective(60.0, (float)clientW/(float)clientH, 0.0001, 1024.0);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -185,10 +166,13 @@ void Engine::Draw()
 	// Setup 2D View - (0,0,xres,yres)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0.0f, width, height, 0.0f, -10, 10);
+	glOrtho(0.0f, clientW, clientH, 0.0f, -10, 10);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	// This hack is because GL primitives do not line up with the correct pixels.
+	// This makes things pixel perfect.
+	glTranslatef(0.375, 0.375, 0.0);
 
 	glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT);
 	glDisable(GL_DEPTH_TEST);
@@ -196,9 +180,10 @@ void Engine::Draw()
 
 	font->print(10, 10, "Hello, I'm a dorky barely usable font.");
 
-	// TODO: 2D Drawing?
-	glPopAttrib();
+	// TODO: Do your 2D drawing here, in pixels.
+	// Top left corner is 0, 0.
 
+	glPopAttrib();
 	SDL_GL_SwapWindow(sdl_window);
 }
 

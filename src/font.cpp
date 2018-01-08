@@ -15,6 +15,21 @@
 #include <string>
 #include <sstream>
 
+//  The * aread makes up GLYPH_PERCENT_OF_CELL_X (% of the square)
+//  The margin on left and right is (1-GLYPH_PERCENT_OF_CELL_X)/2.0f
+//  |  ******  |
+//  |  ******  |
+//  |  ******  |
+//  |  ******  |
+
+const float FixedWidthBMPFont::GLYPH_PERCENT_OF_CELL_X = 0.6f;  // 60% of full box width
+const float FixedWidthBMPFont::GLYPH_PERCENT_OF_CELL_Y = 1.0f;  // Was 1.25; Don't add extra padding, let the app do that.
+const float FixedWidthBMPFont::GLPYH_CELL_PADDING_X = (1-FixedWidthBMPFont::GLYPH_PERCENT_OF_CELL_X)/2.0f;
+const float FixedWidthBMPFont::GLPYH_CELL_PADDING_Y = (1-FixedWidthBMPFont::GLYPH_PERCENT_OF_CELL_Y)/2.0f;
+const float FixedWidthBMPFont::GLPYH_CENTER_OFFSET_X = 0.1f;
+const float FixedWidthBMPFont::GLPYH_CENTER_OFFSET_Y = 0.0f;
+
+
 FixedWidthBMPFont::FixedWidthBMPFont(const char *filename, int size) : size(size)
 {
 	f_texture = LoadTexture(filename);
@@ -23,26 +38,33 @@ FixedWidthBMPFont::FixedWidthBMPFont(const char *filename, int size) : size(size
 	// Creating 256 Display Lists
 	unsigned int base = glGenLists(257);
 
+	// Build the tab character; 4 spaces.
 	glNewList(9, GL_COMPILE);
-		glTranslatef(X_SPACE_SIZE * size * 4, 0, 0);
+		glTranslatef(CharWidth() * 4, 0, 0);
 	glEndList();
 
 	float cx;	// Holds Our X Character Coord
 	float cy;	// Holds Our Y Character Coord
 	for (int loop = 0; loop < 256; loop++)
 	{
+		// 16 rows, 16 cols
 		cx = (loop % 16) / 16.0f;            // X Position Of Current Character
-		cy = (loop / 16) / 16.0f + 0.001f;   // Y Position Of Current Character + correction
+		cy = (loop / 16) / 16.0f;   // Y Position Of Current Character + correction
 
+		// 0.0625f = 1/16
 		glNewList(32 + loop, GL_COMPILE);
+			// Slightly offset from print location to align text.
+			float divy = 0.0625f;
+//			float yOff = -0.1f * divy;
 			glBegin(GL_QUADS);
-				glTexCoord2f(cx,           cy);           glVertex2d(0, 0);
-				glTexCoord2f(cx,           cy + 0.0625f); glVertex2d(0, size);
-				glTexCoord2f(cx + 0.0625f, cy + 0.0625f); glVertex2d(size, size);
-				glTexCoord2f(cx + 0.0625f, cy);           glVertex2d(size, 0);
+				glTexCoord2f(cx,        cy);        glVertex2d(0,    0);
+				glTexCoord2f(cx,        cy + divy); glVertex2d(0,    size);
+				glTexCoord2f(cx + divy, cy + divy); glVertex2d(size, size);
+				glTexCoord2f(cx + divy, cy);        glVertex2d(size, 0);
 			glEnd();
 
-			glTranslatef(X_SPACE_SIZE * size, 0, 0);
+			// Advance the matrix for the next character.
+			glTranslatef(CharWidth(), 0, 0);
 		glEndList();
 	}
 }
@@ -59,6 +81,9 @@ void FixedWidthBMPFont::print(int x, int y, const char *text)
 	glColor4f(1, 1, 1, 1);
 	glPushMatrix();
 	glTranslated(x, y, 0);
+	
+	glTranslated(-(GLPYH_CELL_PADDING_X + GLPYH_CENTER_OFFSET_X) * size,
+				 -(GLPYH_CELL_PADDING_Y + GLPYH_CENTER_OFFSET_Y) * size, 0);
 	glCallLists(strlen(text), GL_BYTE, text);
 	glPopMatrix();
 	glPopAttrib();
@@ -67,16 +92,10 @@ void FixedWidthBMPFont::print(int x, int y, const char *text)
 int FixedWidthBMPFont::Measure(const char *text)
 {
 	if (text == NULL) return 0;
-
-	std::stringstream ss(text);
-	std::string strLine;
-	int max = 0;
-	while (std::getline(ss, strLine, '\n'))
-		max = (strLine.length() > max)? strLine.length() : max;
-	return max * CharWidth();
+	return (int)(CharWidth() * strlen(text));
 }
 
 int FixedWidthBMPFont::LineHeight()
 {
-	return CharHeight();
+	return (int)CharHeight();
 }
