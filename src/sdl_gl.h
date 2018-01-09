@@ -20,3 +20,4 @@ void getInfo(void);
 void getTextureInfo( SDL_Texture *);
 
 #endif  /* SDL_OPENGL_H */
+
