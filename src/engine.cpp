@@ -77,7 +77,7 @@ Engine::Engine()
 	glLoadIdentity( );
 	gluPerspective( 60.0, (float)clientW/(float)clientH, 0.00000000001, 1024.0 );
 	
-	font = new FixedWidthBMPFont("images/font.bmp", 16);
+	font = new FixedWidthBMPFont("../images/font.bmp", 16);
 
 
 	// TODO: More initialization calls ehre.
@@ -107,7 +107,6 @@ void Engine::Update()
 	// TEMP HACK - use a fixed timestep for now, even though this isn't linked to framerate.
 	// Too lazy to do this properly, but want consistent simulation results because I was testing the stability of the integrator.
 	elapsedtime = 0.016;
-
 
 	// TODO: Make update calls here.
 
