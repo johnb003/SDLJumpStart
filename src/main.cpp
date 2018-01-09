@@ -1,5 +1,5 @@
 #include "engine.h"
-
+#include "sdl_gl.h"
 #include "SDL.h"
 
 int main(int argc, char *argv[])
@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 	try
 	{
 		engine = new Engine();
-
+		getInfo();
 		for(;;)
 		{
 			engine->Update();

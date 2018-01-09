@@ -10,9 +10,14 @@
 #ifdef _WIN32
 #include <windows.h>
 #endif  // _WIN32
+
 #include <GL/gl.h>
 #include <GL/glu.h>
 #endif  // Anything other than __APPLE__
 
+void sdl_application_abort( const char *);
+void getInfo(void);
+void getTextureInfo( SDL_Texture *);
 
-#endif  // SDL_OPEN_GL_H
+#endif  /* SDL_OPENGL_H */
+

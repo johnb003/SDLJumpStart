@@ -1,4 +1,5 @@
 #include <iostream>
+#include "sdl_gl.h"
 
 void CustomAssertMsg(const char* expr_str, bool expr, const char* file, int line, const char* msg)
 {
@@ -7,6 +8,6 @@ void CustomAssertMsg(const char* expr_str, bool expr, const char* file, int line
         std::cerr << "Assert failed:\t" << msg << "\n"
             << "Expected:\t" << expr_str << "\n"
             << "Source:\t\t" << file << ", line " << line << "\n";
-        abort();
+        sdl_application_abort("Application quit ...");
     }
 }

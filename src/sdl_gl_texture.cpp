@@ -20,7 +20,7 @@ unsigned int LoadTexture(const char *filename, bool mipmapped)
 	SDL_Surface *surface;
 	surface = SDL_LoadBMP(filename);
 	if (surface == NULL) {
-		fprintf(stderr, "Failed to load texture: %s", filename);
+		fprintf(stderr, "Failed to load texture: %s \n", filename);
 		return 0;
 	}
 	

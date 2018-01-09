@@ -12,7 +12,7 @@
 #include <GL/glu.h>
 #endif  // Anything other than __APPLE__
 
-#include <string>
+#include <string.h>
 #include <sstream>
 
 //  The * aread makes up GLYPH_PERCENT_OF_CELL_X (% of the square)
