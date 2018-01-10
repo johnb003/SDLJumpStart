@@ -92,7 +92,9 @@ Engine::Engine() : font(NULL), sdl_gl_context(NULL), sdl_window(NULL)
 
 	SetGLPerspectiveMat(60.0, (float)clientW/(float)clientH, 0.0001, 1024.0);
 	
-	font = new FixedWidthBMPFont("images/font.bmp", 16);
+	FixedWidthBMPFont *f = new FixedWidthBMPFont("images/font.bmp", 16);
+	f->SetItalics();
+	font = f;
 
 	// TODO: Your initialization calls here.
 	// subsystem = new SubSystem();

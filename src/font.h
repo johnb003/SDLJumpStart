@@ -38,12 +38,19 @@ class FixedWidthBMPFont : public IFont
 
 	unsigned int f_texture;
 	int size;
+	int m_calllistOffset;
+	bool m_italics;
+
+	unsigned char AsciiToListID(char c, bool italics);
 
 public:
 	FixedWidthBMPFont(const char *filename, int size = 16);
 
 	virtual int Measure(const char *text);
 	virtual int LineHeight();
+
+	void SetItalics() { m_italics = true; }
+	void ClearItalics() { m_italics = false; }
 
 	virtual void print(int x, int y, const char *text);
 
