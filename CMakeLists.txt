@@ -5,6 +5,8 @@ project(SDLJumpStart)
 # Place to find the sdl script for "find_package"
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra")
+
 # 'find_package' is meant to find SDL via an installed version on the system.
 #
 # If the find_package fails below (because SDL is not installed).

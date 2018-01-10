@@ -17,8 +17,8 @@ class Engine
 
 	IFont *font;
 
-	SDL_Window *sdl_window;
 	SDL_GLContext sdl_gl_context;
+	SDL_Window *sdl_window;
 
 	float zoom;
 	int dx, dy, dz;		// input deltas

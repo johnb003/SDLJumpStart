@@ -47,8 +47,8 @@ Engine::Engine() : font(NULL), sdl_gl_context(NULL), sdl_window(NULL)
 		throw(1);
 	}
 
-	width = 800;
-	height = 600;
+	width = INITIAL_WIDTH;
+	height = INITIAL_HEIGHT;
 	flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
 
 	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
