@@ -1,7 +1,7 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include "SDL.h"
+#include <SDL.h>
 class IFont;
 
 class Engine
@@ -21,12 +21,14 @@ class Engine
 	SDL_GLContext sdl_gl_context;
 
 	float zoom;
-
-	int dx,dy,dz;
-
-	void HandleKey(SDL_Keycode key, bool down);
-	void Events();
+	int dx, dy, dz;		// input deltas
 	Uint32 last_time; 
+	
+	void ResizeWindow(int newWidth, int newHeight);
+	void HandleWindowEvents(const SDL_Event &event);
+	void HandleKey(SDL_Keycode key, bool down);
+	void HandleInputEvents(const SDL_Event &event);
+	void Events();
 
 public:
 	Engine();
@@ -34,6 +36,7 @@ public:
 
 	void Update();
 	void Draw();
+	void HandleEventImmediate(const SDL_Event &event);
 };
 
 

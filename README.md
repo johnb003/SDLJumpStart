@@ -21,7 +21,7 @@ cd ..
 Run the binary. If successful an app with an OpenGL window should show.
 
 ```
-build/PlasmaSim
+build/SDLJumpStart
 ```
 
 ## Notes
