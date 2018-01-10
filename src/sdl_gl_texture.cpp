@@ -50,14 +50,15 @@ unsigned int LoadTexture(const char *filename, bool mipmapped)
 	{
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-		gluBuild2DMipmaps(GL_TEXTURE_2D, intFmt, surface->w, surface->h, fmt, GL_UNSIGNED_BYTE, surface->pixels);
 	}
 	else
 	{
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexImage2D(GL_TEXTURE_2D, 0, intFmt, surface->w, surface->h, 0, fmt, GL_UNSIGNED_BYTE, surface->pixels);		
 	}
+
+	glTexImage2D(GL_TEXTURE_2D, 0, intFmt, surface->w, surface->h, 0, fmt, GL_UNSIGNED_BYTE, surface->pixels);		
+	if (mipmapped) glGenerateMipmap(GL_TEXTURE_2D);
 	
 	SDL_FreeSurface(surface);
 	return textureIndex;

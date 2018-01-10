@@ -3,6 +3,7 @@
 #include "AssertMsg.h"
 
 #include "sdl_gl.h"
+#include "math_stub.h"
 
 // #define _USE_MATH_DEFINES 1
 #include <math.h>
@@ -88,7 +89,8 @@ Engine::Engine() : font(NULL), sdl_gl_context(NULL), sdl_window(NULL)
 	glViewport(0, 0, clientW, clientH);
 	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity( );
-	gluPerspective( 60.0, (float)clientW/(float)clientH, 0.00000000001, 1024.0 );
+
+	SetGLPerspectiveMat(60.0, (float)clientW/(float)clientH, 0.0001, 1024.0);
 	
 	font = new FixedWidthBMPFont("images/font.bmp", 16);
 
@@ -156,7 +158,7 @@ void Engine::Draw()
 	glViewport(0, 0, clientW, clientH);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0, (float)clientW/(float)clientH, 0.0001, 1024.0);
+	SetGLPerspectiveMat(60.0, (float)clientW/(float)clientH, 0.0001, 1024.0);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

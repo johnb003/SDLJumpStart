@@ -29,6 +29,7 @@ add_executable(SDLJumpStart
 	src/engine.cpp
 	src/font.cpp
 	src/main.cpp
+	src/math_stub.cpp
 )
 
 # Do you need C++11? Maybe just indicate the features you need like this
