@@ -16,7 +16,7 @@ static const char *APP_NAME = "SDLJumpStart";
 static float l0_position[] = {0.0f, 0.0f, 1.0f, 0.0f};
 static float l0_ambient[] =  {0.2f, 0.2f, 0.2f, 1.0f};
 
-Engine::Engine()
+Engine::Engine() : font(NULL), sdl_gl_context(NULL), sdl_window(NULL)
 {
 	xr = 0;
 	yr = 0;
@@ -86,6 +86,19 @@ Engine::Engine()
 	last_time = SDL_GetTicks();
 //    SDL_WM_GrabInput(SDL_GRAB_OFF);
     SDL_ShowCursor(SDL_ENABLE);
+}
+
+Engine::~Engine()
+{
+	// TODO: Your cleanup calls here.
+	// if (subsystem) delete subsystem;
+
+	if (font) delete font;
+
+	if (sdl_gl_context) SDL_GL_DeleteContext(sdl_gl_context);
+	if (sdl_window) SDL_DestroyWindow(sdl_window);
+
+	SDL_Quit();
 }
 
 void Engine::Update()
@@ -185,16 +198,6 @@ void Engine::Draw()
 
 	glPopAttrib();
 	SDL_GL_SwapWindow(sdl_window);
-}
-
-Engine::~Engine()
-{
-	delete font;
-
- 	SDL_GL_DeleteContext(sdl_gl_context);
- 	SDL_DestroyWindow(sdl_window);
-
-	SDL_Quit();
 }
 
 void Engine::HandleKey(SDL_Keycode key, bool down)
